@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WCM: World-Cognition Model for Generalizable Human-Robot Interaction</title>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 32px;
+    }
+
+    /* ── Paper header ── */
+    .paper-header {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 64px 24px 28px;
+      text-align: center;
+      font-family: 'Google Sans', 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+    }
+    .paper-title {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #363636;
+      margin-bottom: 26px;
+    }
+    .paper-authors {
+      font-size: 20px;
+      line-height: 1.7;
+      color: #363636;
+      margin-bottom: 10px;
+    }
+    .paper-authors .author { white-space: nowrap; }
+    .paper-authors sup { font-size: 0.62em; }
+    .paper-affiliations {
+      font-size: 18px;
+      line-height: 1.7;
+      color: #4a4a4a;
+    }
+    .paper-affiliations .affil {
+      white-space: nowrap;
+      margin: 0 12px;
+      display: inline-block;
+    }
+    .paper-affiliations sup { font-size: 0.62em; }
+
+    /* ── Teaser figure ── */
+    .teaser {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 8px 24px 16px;
+    }
+    .teaser img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: #fff;
+    }
+    .teaser-caption {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    /* ── Two-panel figure (CyberView) ── */
+    .figure-block {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 8px 24px 16px;
+    }
+    .cv-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: end;
+    }
+    .cv-panel img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      display: block;
+    }
+    .cv-sub {
+      margin-top: 8px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .figure-caption {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+      text-align: left;
+    }
+    @media (max-width: 720px) {
+      .cv-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Section titles (paper style) ── */
+    .paper-section {
+      font-family: 'Google Sans', 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      color: #363636;
+      margin-bottom: 22px;
+    }
+    .section-content {
+      font-size: 18px;
+      line-height: 1.8;
+      color: #4a4a4a;
+      text-align: justify;
+    }
+    .section-content p + p { margin-top: 20px; }
+
+    /* ── Empty placeholder ── */
+    .placeholder {
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 12px;
+      padding: 40px 32px;
+      text-align: center;
+      color: #aaa;
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    /* ── Video grid: two per row, name below ── */
+    .vid-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px 28px;
+    }
+    .vid-item { display: flex; flex-direction: column; }
+    .vid-frame {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+    .vid-frame:hover {
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 3px rgba(26,115,232,0.15), 0 6px 18px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+    }
+    .vid-frame video {
+      width: 100%;
+      display: block;
+    }
+    .vid-name {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    @media (max-width: 720px) {
+      .vid-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Paper header -->
+  <header class="paper-header">
+    <h1 class="paper-title">WCM: World-Cognition Model for Generalizable Human&ndash;Robot Interaction</h1>
+    <div class="paper-authors">
+      <span class="author">Yuzhen Chen<sup>1</sup></span>,
+      <span class="author">LT<sup>3</sup></span>,
+      <span class="author">Andrew Hoang<sup>3</sup></span>,
+      <span class="author">Kaichen Zhou<sup>1,2</sup></span>
+    </div>
+    <div class="paper-affiliations">
+      <span class="affil"><sup>1</sup>Harvard University</span>
+      <span class="affil"><sup>2</sup>Massachusetts Institute of Technology</span>
+      <span class="affil"><sup>3</sup>Cyberbrain, Inc.</span>
+    </div>
+  </header>
+
+  <!-- Teaser figure (teaching mode) -->
+  <div class="teaser">
+    <img src="media/img/teaser.png" alt="Teaching mode teaser" />
+    <p class="teaser-caption">
+      <strong>Fig. 1: Teaching mode.</strong> A person teaches the robot a new task through
+      natural-language interaction; the captured interaction is fed back through the data flywheel.
+    </p>
+  </div>
+
+  <!-- Abstract (placeholder) -->
+  <section id="abstract" class="paper-section">
+    <h2 class="section-title">Abstract</h2>
+    <div class="section-content">
+      <p>
+        Language agents are capable, conversational partners in software, yet robots still
+        cannot truly interact with the people they serve. The two paradigms that dominate
+        embodied control&mdash;end-to-end vision&ndash;language&ndash;action policies and
+        world-model planners&mdash;take an instruction once and cannot talk back, so a person
+        cannot tell what the robot understood, redirect it mid-task, or calibrate trust. We argue
+        the bottleneck is not the language interface but <em>representational alignment</em>: to
+        interact well, a robot must think like a person, holding a human-centric,
+        object-and-affordance view of the world. We present the
+        <strong>World-Cognition Model</strong> (WCM), which realizes this through two innovations.
+        The first is the <strong>SLAK</strong> harness&mdash;four decoupled, white-box layers:
+        Sensing (<strong>CyberView</strong>, fusing camera, depth, audio, and proprioception into
+        one labeled 3D scene with interactable points), Logic (a robotics-tuned reasoning model),
+        Action (continuous control), and Knowledge (memory). The second is an
+        <strong>asynchronous runtime</strong> that lets the robot think, talk, and explain while
+        it moves, rather than freezing to reason. Because WCM acts by reasoning rather than by a
+        fixed instruction-to-action mapping, the reasoning it learns&mdash;distilled from chains of
+        thought into a small on-robot model&mdash;transfers zero-shot to unseen objects, phrasings,
+        and tasks. On real hardware, a person speaks freely and changes the goal mid-action while
+        the robot confirms out loud, recovers, and explains what it is doing; we evaluate on
+        <strong>SAGE-Bench</strong> (71 tasks, 13 categories), with no task-specific post-training.
+      </p>
+    </div>
+  </section>
+
+  <!-- Figure 2: CyberView -->
+  <div class="figure-block">
+    <div class="cv-row">
+      <div class="cv-panel">
+        <img src="media/img/cyberview_raw.png" alt="raw fused point cloud" />
+        <div class="cv-sub">(a) raw fused point cloud</div>
+      </div>
+      <div class="cv-panel">
+        <img src="media/img/cyberview_segmented.png" alt="segmented scene with interactable points" />
+        <div class="cv-sub">(b) segmented scene with interactable points</div>
+      </div>
+    </div>
+    <p class="figure-caption">
+      <strong>Fig. 2: CyberView.</strong> CyberView turns raw multi-modal sensing (a) into a
+      labeled 3D scene (b) that gives the person and the robot a common object to refer to.
+    </p>
+  </div>
+
+  <!-- Method (placeholder) -->
+  <section id="method" class="paper-section">
+    <h2 class="section-title">Method</h2>
+    <div class="section-content">
+      <p>
+        The <strong>World-Cognition Model</strong> (WCM) is a reasoning-first embodied agent.
+        Unlike vision&ndash;language&ndash;action policies trained on human teleoperation, WCM
+        improves from its own experience and from interaction with the people it serves, through
+        three components:
+      </p>
+      <p>
+        <strong>The SLAK architecture.</strong> WCM is built from four decoupled, white-box
+        layers&mdash;<em>Sensing</em>, <em>Logic</em>, <em>Action</em>, and <em>Knowledge</em>.
+        The Logic layer is a robotics-tuned reasoning model that reads an instruction as
+        <em>intent</em> rather than keywords and follows a <em>plan&ndash;reason&ndash;validate</em>
+        loop, committing to an explicit expected outcome it can state aloud&mdash;so a
+        misunderstanding is caught before it becomes a wrong action. The Sensing layer,
+        <strong>CyberView</strong>, fuses RGB, depth, audio, and proprioception into a single
+        labeled 3D scene whose defining product is the <em>interactable point</em>: the precise,
+        metric point the arm acts on (a bin at its lid, a drawer at its handle), turning vague
+        deictic language such as &ldquo;the bin&rdquo; or &ldquo;that one&rdquo; into a place the
+        robot can reach. An <em>asynchronous engine</em> splits control into concurrent
+        reasoner, executor, and result loops, so the robot can think, talk, and explain while it
+        moves rather than freezing to reason.
+      </p>
+      <p>
+        <strong>Self-improving CoT distillation.</strong> Every rollout logs the full chain of
+        reasoning behind each decision, and both successful and failed traces are kept. A teacher
+        ensemble refines these into cleaner chains of thought, which are distilled into the
+        on-device model via <em>LoRA</em>. Familiar tasks become faster and more reliable, and the
+        gains generalize&mdash;held-out skills improve because what transfers is reusable reasoning
+        about handles, affordances, and action sequencing rather than memorized task scripts.
+      </p>
+      <p>
+        <strong>Human-in-the-loop skill acquisition.</strong> For tasks too novel or
+        long-horizon for the autonomous loop, a person places the robot in a <em>teaching mode</em>
+        by voice and walks it through the task one step at a time. The entire human&ndash;robot
+        interaction&mdash;what the person says, what the robot does, and the person's feedback&mdash;is
+        recorded, up-weighted, and folded back into distillation: reused immediately from working
+        memory and later internalized into the model's own competence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Benchmark with XSquare -->
+  <section id="benchmark" class="paper-section">
+    <h2 class="section-title">Benchmark with XSquare</h2>
+    <div class="vid-grid">
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/color_plate_sort.jpg">
+            <source src="media/benchmark/color_plate_sort.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Color Plate Sort</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/label_recognition.jpg">
+            <source src="media/benchmark/label_recognition.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Label Recognition</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/pick_up_fruits.jpg">
+            <source src="media/benchmark/pick_up_fruits.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Pick Up Fruits</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_trash.jpg">
+            <source src="media/benchmark/throw_trash.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Throw Trash</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/pick_up_cube.jpg">
+            <source src="media/benchmark/pick_up_cube.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Pick Up Cube</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/solve_math_problem.jpg">
+            <source src="media/benchmark/solve_math_problem.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Solve Math Problem</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Human-Robot Interaction -->
+  <section id="human-interaction" class="paper-section">
+    <h2 class="section-title">Human&ndash;Robot Interactive</h2>
+    <div class="vid-grid">
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_popcorn.jpg">
+            <source src="media/human/hand_me_the_popcorn.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Hand me the popcorn</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_honey.jpg">
+            <source src="media/human/hand_me_the_honey.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Hand me the honey</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_that_jacket.jpg">
+            <source src="media/human/hand_me_that_jacket.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Hand me that jacket</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_wrench.jpg">
+            <source src="media/human/hand_me_the_wrench.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Hand me the wrench</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hold_the_bbq_tong.jpg">
+            <source src="media/human/hold_the_bbq_tong.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Hold the BBQ tong</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/grab_me_water_bottle.jpg">
+            <source src="media/human/grab_me_water_bottle.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Grab me the water bottle</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/open_drawer_put_screwdriver.jpg">
+            <source src="media/human/open_drawer_put_screwdriver.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Open the drawer &amp; put the screwdriver in</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_away_the_water_bottle.jpg">
+            <source src="media/human/throw_away_the_water_bottle.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Throw away the water bottle</div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-frame" onclick="togglePlay(this)">
+          <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_cup_in_trash.jpg">
+            <source src="media/human/throw_cup_in_trash.mp4" type="video/mp4" /></video>
+        </div>
+        <div class="vid-name">Throw the cup in the trash can</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section id="conclusion" class="paper-section">
+    <h2 class="section-title">Conclusion</h2>
+    <div class="section-content">
+      <p>
+        We present <strong>WCM</strong>, a reasoning-first embodied system built on the
+        <strong>SLAK</strong> architecture and an asynchronous runtime, that achieves interaction
+        through <em>representational alignment</em>&mdash;a grounded view of objects, actions, and
+        intent shared between robot and person. It points toward generalizable human&ndash;robot
+        interaction: robots that do not merely execute commands, but reason with people through a
+        shared representation of the world.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    // Click a video to play / pause
+    function togglePlay(frame) {
+      const v = frame.querySelector('video');
+      if (v.paused) v.play(); else v.pause();
+    }
+  </script>
+
+</body>
+</html>
