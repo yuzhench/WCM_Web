@@ -212,24 +212,22 @@
       <p>
         Language agents are capable, conversational partners in software, yet robots still
         cannot truly interact with the people they serve. The two paradigms that dominate
-        embodied control&mdash;end-to-end vision&ndash;language&ndash;action policies and
-        world-model planners&mdash;take an instruction once and cannot talk back, so a person
-        cannot tell what the robot understood, redirect it mid-task, or calibrate trust. We argue
-        the bottleneck is not the language interface but <em>representational alignment</em>: to
-        interact well, a robot must think like a person, holding a human-centric,
-        object-and-affordance view of the world. We present the
-        <strong>World-Cognition Model</strong> (WCM), which realizes this through two innovations.
-        The first is the <strong>SLAK</strong> harness&mdash;four decoupled, white-box layers:
-        Sensing (<strong>CyberView</strong>, fusing camera, depth, audio, and proprioception into
-        one labeled 3D scene with interactable points), Logic (a robotics-tuned reasoning model),
-        Action (continuous control), and Knowledge (memory). The second is an
-        <strong>asynchronous runtime</strong> that lets the robot think, talk, and explain while
-        it moves, rather than freezing to reason. Because WCM acts by reasoning rather than by a
-        fixed instruction-to-action mapping, the reasoning it learns&mdash;distilled from chains of
-        thought into a small on-robot model&mdash;transfers zero-shot to unseen objects, phrasings,
-        and tasks. On real hardware, a person speaks freely and changes the goal mid-action while
-        the robot confirms out loud, recovers, and explains what it is doing; we evaluate on
-        <strong>SAGE-Bench</strong> (71 tasks, 13 categories), with no task-specific post-training.
+        embodied control (end-to-end vision-language-action policies and world-model planners)
+        take an instruction once and rarely talk back, so a person cannot easily tell what the
+        robot understood, redirect it mid-task, or calibrate trust. We argue the bottleneck is
+        less the language interface than <em>representational alignment</em>: a robot tends to
+        interact better when it reasons from a human-centric, object-and-affordance view of the
+        world, compatible with the person's own. We present the
+        <strong>World-Cognition Model</strong> (WCM), built on the <strong>SLAK</strong> harness:
+        four decoupled, white-box layers (Sensing/CyberView, Logic, Action, and Knowledge)
+        coordinated by an <strong>asynchronous runtime</strong> that lets the robot think, talk,
+        and explain while it moves rather than freezing to reason. WCM is designed to support
+        transfer across objects, phrasings, and task compositions by reusing explicit reasoning
+        over grounded objects, affordances, and action primitives. WCM further improves from its
+        own operation: a teacher ensemble turns the robot's successful and failed rollouts into
+        refined chains of thought distilled into a small edge model. In preliminary live trials on
+        a low-cost mobile manipulator, WCM reaches a 73.8% average success rate across nine
+        dialogue-driven interaction tasks.
       </p>
     </div>
   </section>
@@ -273,17 +271,20 @@
         labeled 3D scene whose defining product is the <em>interactable point</em>: the precise,
         metric point the arm acts on (a bin at its lid, a drawer at its handle), turning vague
         deictic language such as &ldquo;the bin&rdquo; or &ldquo;that one&rdquo; into a place the
-        robot can reach. An <em>asynchronous engine</em> splits control into concurrent
+        robot can reach. An <em>asynchronous runtime</em> splits control into concurrent
         reasoner, executor, and result loops, so the robot can think, talk, and explain while it
         moves rather than freezing to reason.
       </p>
       <p>
         <strong>Self-improving CoT distillation.</strong> Every rollout logs the full chain of
-        reasoning behind each decision, and both successful and failed traces are kept. A teacher
-        ensemble refines these into cleaner chains of thought, which are distilled into the
-        on-device model via <em>LoRA</em>. Familiar tasks become faster and more reliable, and the
-        gains generalize&mdash;held-out skills improve because what transfers is reusable reasoning
-        about handles, affordances, and action sequencing rather than memorized task scripts.
+        reasoning behind each decision, and both successful and failed traces are kept. The
+        supervised unit is the <em>per-step reasoning</em>&mdash;not motor actions, and not whole
+        tasks&mdash;so a single task yields 20&ndash;40 reusable (context, reasoning) pairs. A
+        teacher ensemble refines these into cleaner chains of thought, distilled into the edge
+        model via <em>LoRA</em>. The gains generalize rather than overfit: held-out skills improve
+        because what transfers is reusable reasoning about handles, affordances, and action
+        sequencing rather than memorized task scripts. Across the nine interaction tasks, success
+        rises from roughly 20% with no fine-tuning to about 74% after training.
       </p>
       <p>
         <strong>Human-in-the-loop skill acquisition.</strong> For tasks too novel or
