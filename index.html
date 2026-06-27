@@ -128,6 +128,8 @@
       text-align: justify;
     }
     .section-content p + p { margin-top: 20px; }
+    .section-content a { color: #1a73e8; text-decoration: none; }
+    .section-content a:hover { text-decoration: underline; }
 
     /* ── Empty placeholder ── */
     .placeholder {
@@ -153,8 +155,29 @@
       border-radius: 10px;
       overflow: hidden;
       border: 2px solid transparent;
-      cursor: pointer;
+      cursor: zoom-in;
       transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    /* ── Lightbox (click a video to enlarge) ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox video {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      cursor: default;
     }
     .vid-frame:hover {
       border-color: #1a73e8;
@@ -197,7 +220,7 @@
   </header>
 
   <!-- Teaser figure (teaching mode) -->
-  <div class="teaser">
+  <div class="teaser" id="fig1">
     <img src="media/img/teaser.png" alt="Teaching mode teaser" />
     <p class="teaser-caption">
       <strong>Fig. 1: Teaching mode.</strong> A person teaches the robot a new task through
@@ -233,7 +256,7 @@
   </section>
 
   <!-- Figure 2: CyberView -->
-  <div class="figure-block">
+  <div class="figure-block" id="fig2">
     <div class="cv-row">
       <div class="cv-panel">
         <img src="media/img/cyberview_raw.png" alt="raw fused point cloud" />
@@ -268,7 +291,8 @@
         loop, committing to an explicit expected outcome it can state aloud&mdash;so a
         misunderstanding is caught before it becomes a wrong action. The Sensing layer,
         <strong>CyberView</strong>, fuses RGB, depth, audio, and proprioception into a single
-        labeled 3D scene whose defining product is the <em>interactable point</em>: the precise,
+        labeled 3D scene (<a href="#fig2">Fig.&nbsp;2</a>) whose defining product is the
+        <em>interactable point</em>: the precise,
         metric point the arm acts on (a bin at its lid, a drawer at its handle), turning vague
         deictic language such as &ldquo;the bin&rdquo; or &ldquo;that one&rdquo; into a place the
         robot can reach. An <em>asynchronous runtime</em> splits control into concurrent
@@ -289,7 +313,8 @@
       <p>
         <strong>Human-in-the-loop skill acquisition.</strong> For tasks too novel or
         long-horizon for the autonomous loop, a person places the robot in a <em>teaching mode</em>
-        by voice and walks it through the task one step at a time. The entire human&ndash;robot
+        by voice and walks it through the task one step at a time (<a href="#fig1">Fig.&nbsp;1</a>).
+        The entire human&ndash;robot
         interaction&mdash;what the person says, what the robot does, and the person's feedback&mdash;is
         recorded, up-weighted, and folded back into distillation: reused immediately from working
         memory and later internalized into the model's own competence.
@@ -302,42 +327,42 @@
     <h2 class="section-title">Benchmark with XSquare</h2>
     <div class="vid-grid">
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/color_plate_sort.jpg">
             <source src="media/benchmark/color_plate_sort.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Color Plate Sort</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/label_recognition.jpg">
             <source src="media/benchmark/label_recognition.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Label Recognition</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/pick_up_fruits.jpg">
             <source src="media/benchmark/pick_up_fruits.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Pick Up Fruits</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_trash.jpg">
             <source src="media/benchmark/throw_trash.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Throw Trash</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/pick_up_cube.jpg">
             <source src="media/benchmark/pick_up_cube.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Pick Up Cube</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/solve_math_problem.jpg">
             <source src="media/benchmark/solve_math_problem.mp4" type="video/mp4" /></video>
         </div>
@@ -351,63 +376,63 @@
     <h2 class="section-title">Human&ndash;Robot Interactive</h2>
     <div class="vid-grid">
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_popcorn.jpg">
             <source src="media/human/hand_me_the_popcorn.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Hand me the popcorn</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_honey.jpg">
             <source src="media/human/hand_me_the_honey.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Hand me the honey</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_that_jacket.jpg">
             <source src="media/human/hand_me_that_jacket.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Hand me that jacket</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hand_me_the_wrench.jpg">
             <source src="media/human/hand_me_the_wrench.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Hand me the wrench</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/hold_the_bbq_tong.jpg">
             <source src="media/human/hold_the_bbq_tong.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Hold the BBQ tong</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/grab_me_water_bottle.jpg">
             <source src="media/human/grab_me_water_bottle.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Grab me the water bottle</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/open_drawer_put_screwdriver.jpg">
             <source src="media/human/open_drawer_put_screwdriver.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Open the drawer &amp; put the screwdriver in</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_away_the_water_bottle.jpg">
             <source src="media/human/throw_away_the_water_bottle.mp4" type="video/mp4" /></video>
         </div>
         <div class="vid-name">Throw away the water bottle</div>
       </div>
       <div class="vid-item">
-        <div class="vid-frame" onclick="togglePlay(this)">
+        <div class="vid-frame" onclick="openLightbox(this)">
           <video autoplay loop muted playsinline preload="metadata" poster="media/posters/throw_cup_in_trash.jpg">
             <source src="media/human/throw_cup_in_trash.mp4" type="video/mp4" /></video>
         </div>
@@ -431,12 +456,35 @@
     </div>
   </section>
 
+  <!-- Lightbox overlay (enlarged video) -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <video id="lightbox-video" controls loop playsinline></video>
+  </div>
+
   <script>
-    // Click a video to play / pause
-    function togglePlay(frame) {
-      const v = frame.querySelector('video');
-      if (v.paused) v.play(); else v.pause();
+    // Click a grid video to enlarge it in a centered lightbox
+    function openLightbox(frame) {
+      const src = frame.querySelector('source').getAttribute('src');
+      const lb = document.getElementById('lightbox');
+      const v = document.getElementById('lightbox-video');
+      v.src = src;
+      lb.classList.add('open');
+      v.currentTime = 0;
+      v.play();
     }
+    // Click the backdrop (not the video itself) or press Esc to close
+    function closeLightbox(e) {
+      if (e && e.target.id === 'lightbox-video') return;
+      const lb = document.getElementById('lightbox');
+      const v = document.getElementById('lightbox-video');
+      lb.classList.remove('open');
+      v.pause();
+      v.removeAttribute('src');
+      v.load();
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
   </script>
 
 </body>
